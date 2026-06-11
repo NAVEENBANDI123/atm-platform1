@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Credit alert</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#1b5e20">Credit alert</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>You have received <strong th:text="${amount}">0.00</strong> from
+     <strong th:text="${sourceAccount}">000000000000</strong>.</p>
+  <p>Reference: <span th:text="${reference}">TXN-</span></p>
+</body>
+</html>

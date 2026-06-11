@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Loan application received</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">Loan application received</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>We have received your application for a <span th:text="${loanType}">PERSONAL</span> loan.</p>
+  <table cellpadding="6" cellspacing="0">
+    <tr><td><b>Amount</b></td><td th:text="${amount}">0.00</td></tr>
+    <tr><td><b>Tenure</b></td><td><span th:text="${tenureMonths}">12</span> months</td></tr>
+    <tr><td><b>Estimated EMI</b></td><td th:text="${estimatedEmi}">0.00</td></tr>
+  </table>
+  <p>Our loan officer will review your application shortly.</p>
+</body>
+</html>

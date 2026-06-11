@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>New customer awaiting approval</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">New customer awaiting approval</h2>
+  <p>A new customer registration has been submitted and is awaiting approval.</p>
+  <table cellpadding="6" cellspacing="0" style="border-collapse:collapse">
+    <tr><td><b>Name</b></td><td th:text="${name}">Customer</td></tr>
+    <tr><td><b>Username</b></td><td th:text="${username}">username</td></tr>
+    <tr><td><b>Email</b></td><td th:text="${email}">email</td></tr>
+    <tr><td><b>Mobile</b></td><td th:text="${mobile}">mobile</td></tr>
+  </table>
+  <p>Please log in to the employee portal and review the application
+     under <i>Pending Customers</i>.</p>
+</body>
+</html>

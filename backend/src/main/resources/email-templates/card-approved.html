@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Card approved</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#1b5e20">Your card is approved</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your <span th:text="${cardType}">DEBIT</span> card has been approved and is now active.</p>
+  <table cellpadding="6" cellspacing="0" style="border:1px solid #ddd;border-collapse:collapse">
+    <tr><td><b>Card</b></td><td th:text="${maskedNumber}">**** **** **** 0000</td></tr>
+    <tr><td><b>Expires</b></td><td th:text="${expiryDate}">YYYY-MM-DD</td></tr>
+  </table>
+  <p>Card details are also available in the customer portal under <i>Services -> Cards</i>.</p>
+</body>
+</html>

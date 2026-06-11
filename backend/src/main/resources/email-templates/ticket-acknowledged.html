@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Support ticket received</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">We've received your request</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>We've received your support request and our team will respond shortly.</p>
+  <p><b>Ticket #</b> <span th:text="${ticketId}">0</span><br>
+     <b>Subject:</b> <span th:text="${subject}">subject</span></p>
+</body>
+</html>

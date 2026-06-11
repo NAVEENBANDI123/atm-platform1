@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Loan application not approved</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#b71c1c">Loan application not approved</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your <span th:text="${loanType}">PERSONAL</span> loan application for
+     <span th:text="${amount}">0.00</span> could not be approved.</p>
+  <p><b>Reason:</b> <span th:text="${reason}">Reason</span></p>
+  <p>You may submit a new application after addressing the reason above.</p>
+</body>
+</html>

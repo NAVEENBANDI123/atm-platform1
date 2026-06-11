@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Account application not approved</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#b71c1c">Account application not approved</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>We are sorry to inform you that your account application could not be approved at this time.</p>
+  <p><b>Reason:</b> <span th:text="${reason}">Reason</span></p>
+  <p>If you believe this was a mistake or you would like to provide additional information,
+     please contact our support team.</p>
+  <p style="margin-top:32px">Regards,<br>ATM Platform Team</p>
+</body>
+</html>

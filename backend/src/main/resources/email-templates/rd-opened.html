@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Recurring deposit opened</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#1b5e20">Recurring deposit opened</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your recurring deposit has been activated.</p>
+  <table cellpadding="6" cellspacing="0" style="border:1px solid #ddd;border-collapse:collapse">
+    <tr><td><b>Monthly Amount</b></td><td th:text="${monthlyAmount}">0.00</td></tr>
+    <tr><td><b>Tenure</b></td><td><span th:text="${tenureMonths}">12</span> months</td></tr>
+    <tr><td><b>Interest Rate</b></td><td><span th:text="${rate}">6.00</span>% p.a.</td></tr>
+    <tr><td><b>Estimated Maturity</b></td><td th:text="${maturityAmount}">0.00</td></tr>
+    <tr><td><b>Maturity Date</b></td><td th:text="${maturityDate}">YYYY-MM-DD</td></tr>
+  </table>
+</body>
+</html>

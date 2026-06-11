@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Loan approved</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#1b5e20">Your loan has been approved</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your <span th:text="${loanType}">PERSONAL</span> loan of
+     <strong th:text="${amount}">0.00</strong> has been approved and credited to your savings account.</p>
+  <table cellpadding="6" cellspacing="0" style="border:1px solid #ddd;border-collapse:collapse">
+    <tr><td><b>Loan Account No</b></td><td th:text="${loanAccountNo}">LN0000000000</td></tr>
+    <tr><td><b>Interest Rate</b></td><td><span th:text="${interestRate}">0.00</span>% p.a.</td></tr>
+    <tr><td><b>Monthly EMI</b></td><td th:text="${emiAmount}">0.00</td></tr>
+  </table>
+  <p>Your repayment schedule is available in the customer portal under
+     <i>Services -> Loans</i>.</p>
+</body>
+</html>

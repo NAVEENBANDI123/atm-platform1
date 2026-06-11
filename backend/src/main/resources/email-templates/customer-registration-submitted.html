@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Registration received</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">ATM Platform</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your account application has been submitted successfully and is waiting for approval.
+     We will email you again as soon as one of our officers reviews your details.</p>
+  <p>Submitted username: <strong th:text="${username}">username</strong></p>
+  <p>If you did not initiate this request, please contact our support team immediately.</p>
+  <p style="margin-top:32px">Regards,<br>ATM Platform Team</p>
+</body>
+</html>

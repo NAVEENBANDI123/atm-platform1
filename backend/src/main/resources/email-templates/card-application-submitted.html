@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Card application received</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">Card application received</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>We have received your application for a <span th:text="${cardType}">DEBIT</span> card.
+     It is currently under review. You will be able to see the card details only after
+     it is approved.</p>
+  <p>Please check the customer portal for status updates.</p>
+</body>
+</html>

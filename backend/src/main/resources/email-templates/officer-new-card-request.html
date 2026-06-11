@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>New card request</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">New card request</h2>
+  <p>A new card application has been submitted for review.</p>
+  <table cellpadding="6" cellspacing="0">
+    <tr><td><b>Applicant</b></td><td th:text="${name}">Customer</td></tr>
+    <tr><td><b>Card Type</b></td><td th:text="${cardType}">DEBIT</td></tr>
+    <tr><td><b>Application ID</b></td><td th:text="${applicationId}">0</td></tr>
+  </table>
+  <p>Please log in to the employee portal to review and recommend the application.</p>
+</body>
+</html>

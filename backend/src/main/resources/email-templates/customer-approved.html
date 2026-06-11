@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Account approved</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#1b5e20">Welcome aboard!</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your account application has been approved. You can now log in to the customer portal
+     and start banking with us.</p>
+  <table cellpadding="6" cellspacing="0" style="border:1px solid #ddd;border-collapse:collapse">
+    <tr><td><b>Customer ID</b></td><td th:text="${customerId}">CUST123456</td></tr>
+    <tr><td><b>Account Number</b></td><td th:text="${accountNumber}">000000000000</td></tr>
+    <tr><td><b>Account Type</b></td><td th:text="${accountType}">SAVINGS</td></tr>
+  </table>
+  <p>Please keep these details safe and never share them with anyone.</p>
+  <p style="margin-top:32px">Regards,<br>ATM Platform Team</p>
+</body>
+</html>

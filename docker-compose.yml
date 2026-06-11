@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: atm-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-atm}
+      POSTGRES_USER: ${DB_USERNAME:-atm}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-atm}
+    ports:
+      - "5432:5432"
+    volumes:
+      - atm-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-atm} -d ${DB_NAME:-atm}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: atm-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_USERNAME: ${DB_USERNAME:-atm}
+      DB_PASSWORD: ${DB_PASSWORD:-atm}
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-very-long-random-secret-key-at-least-64-bytes-long-please}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8081}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  frontend:
+    build: ./frontend
+    container_name: atm-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+
+volumes:
+  atm-db-data:

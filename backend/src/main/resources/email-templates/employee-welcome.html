@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Welcome to ATM Platform</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">Welcome to ATM Platform</h2>
+  <p>Hi <span th:text="${name}">Employee</span>,</p>
+  <p>An employee account has been created for you on the ATM Platform.</p>
+  <table cellpadding="6" cellspacing="0" style="border:1px solid #ddd;border-collapse:collapse">
+    <tr><td><b>Username</b></td><td th:text="${username}">username</td></tr>
+    <tr><td><b>Role</b></td><td th:text="${role}">ROLE_*</td></tr>
+    <tr><td><b>Employee Code</b></td><td th:text="${employeeCode}">EMP00000</td></tr>
+  </table>
+  <p>Please sign in to the employee portal and change your password on first login.</p>
+</body>
+</html>

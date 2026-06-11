@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Ticket update</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">Update on your support ticket</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p>Your ticket #<span th:text="${ticketId}">0</span> has been updated to
+     <strong th:text="${status}">RESOLVED</strong>.</p>
+  <p><b>Subject:</b> <span th:text="${subject}">subject</span></p>
+  <p><b>Resolution:</b><br><span th:text="${resolution}">Details</span></p>
+</body>
+</html>

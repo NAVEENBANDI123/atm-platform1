@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><meta charset="UTF-8"><title>Withdrawal debited</title></head>
+<body style="font-family:Arial,sans-serif;color:#222;line-height:1.5">
+  <h2 style="color:#0d47a1">Withdrawal debited</h2>
+  <p>Hi <span th:text="${name}">Customer</span>,</p>
+  <p><strong th:text="${amount}">0.00</strong> has been debited from your account
+     <span th:text="${accountNumber}">000000000000</span>.</p>
+  <table cellpadding="6" cellspacing="0">
+    <tr><td><b>Reference</b></td><td th:text="${reference}">TXN-</td></tr>
+    <tr><td><b>Available Balance</b></td><td th:text="${balance}">0.00</td></tr>
+  </table>
+  <p>If you do not recognise this transaction, contact support immediately.</p>
+</body>
+</html>
