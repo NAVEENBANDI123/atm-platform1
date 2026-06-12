@@ -16,18 +16,42 @@ services:
       timeout: 5s
       retries: 10
 
+  # ---------------------------------------------------------------------
+  # MailHog - SMTP "sink" + browsable inbox at http://localhost:8025
+  # The backend talks to it as host "mail" because containers reach each
+  # other by service name on Docker's internal network. localhost INSIDE
+  # the backend container would be the backend itself, not your laptop.
+  # ---------------------------------------------------------------------
+  mail:
+    image: mailhog/mailhog:latest
+    container_name: atm-mail
+    ports:
+      - "1025:1025"   # SMTP - so a backend running on the host can also use it
+      - "8025:8025"   # Web UI - open this in your browser
+
   backend:
     build: ./backend
     container_name: atm-backend
     depends_on:
       db:
         condition: service_healthy
+      mail:
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: docker
       DB_USERNAME: ${DB_USERNAME:-atm}
       DB_PASSWORD: ${DB_PASSWORD:-atm}
       JWT_SECRET: ${JWT_SECRET:-change-me-to-a-very-long-random-secret-key-at-least-64-bytes-long-please}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8081}
+      # Mail wiring: deliver to MailHog over the Docker network ("mail" is
+      # the service name above, NOT localhost).
+      MAIL_HOST: ${MAIL_HOST:-mail}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_ENABLED: ${MAIL_ENABLED:-true}
+      MAIL_LOG_TO_CONSOLE: ${MAIL_LOG_TO_CONSOLE:-true}
+      # Demo seed (set DEMO_RESET_PASSWORDS=false in any real deployment)
+      DEMO_RESET_PASSWORDS: ${DEMO_RESET_PASSWORDS:-true}
+      DEMO_DEFAULT_PASSWORD: ${DEMO_DEFAULT_PASSWORD:-password}
     ports:
       - "8080:8080"
     healthcheck:
