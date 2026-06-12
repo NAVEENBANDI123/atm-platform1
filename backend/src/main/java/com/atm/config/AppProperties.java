@@ -20,6 +20,7 @@ public class AppProperties {
     private final Cors cors = new Cors();
     private final Mail mail = new Mail();
     private final Banking banking = new Banking();
+    private final Demo demo = new Demo();
 
     @Getter
     @Setter
@@ -49,6 +50,7 @@ public class AppProperties {
         private String from = "no-reply@atm.local";
         private String fromName = "ATM Platform";
         private boolean enabled = true;
+        private boolean logToConsole = true;
         private List<String> adminRecipients = List.of("admin@atm.local");
         private List<String> cardOfficerRecipients = List.of("card.officer@atm.local");
         private List<String> loanOfficerRecipients = List.of("loan.officer@atm.local");
@@ -70,5 +72,19 @@ public class AppProperties {
         private BigDecimal education = new BigDecimal("9.50");
         private BigDecimal vehicle   = new BigDecimal("10.50");
         private BigDecimal home      = new BigDecimal("8.50");
+    }
+
+    @Getter
+    @Setter
+    public static class Demo {
+        /**
+         * When true, demo seed users get their password reset to {@link #defaultPassword}
+         * on every application start. This is a development convenience so the documented
+         * credentials always work. MUST be false in any real deployment.
+         */
+        private boolean resetPasswords = true;
+
+        /** Plain-text password assigned to all demo users when resetPasswords is true. */
+        private String defaultPassword = "password";
     }
 }

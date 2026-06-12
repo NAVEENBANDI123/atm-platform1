@@ -14,7 +14,12 @@ import { authApi } from '../../features/auth/authApi.js';
 import { extractError } from '../../utils/error.js';
 import AuthLayout from '../../components/AuthLayout.jsx';
 
-export default function ForgotPasswordPage() {
+/**
+ * Employee forgot-password (mirror of the customer flow but routed to the
+ * employee endpoints).  Step 1 verifies username + mobile and returns a
+ * reset token (also emailed to the employee).  Step 2 sets a new password.
+ */
+export default function EmployeeForgotPasswordPage() {
   const navigate = useNavigate();
   const verifyForm = useForm();
   const resetForm = useForm();
@@ -25,7 +30,7 @@ export default function ForgotPasswordPage() {
   const onVerify = async (values) => {
     setServerError('');
     try {
-      const { data } = await authApi.customerForgotPassword(values);
+      const { data } = await authApi.employeeForgotPassword(values);
       setResetToken(data.data.resetToken);
     } catch (err) {
       setServerError(extractError(err, 'Could not verify identity'));
@@ -35,12 +40,12 @@ export default function ForgotPasswordPage() {
   const onReset = async (values) => {
     setServerError('');
     try {
-      await authApi.customerResetPassword({
+      await authApi.employeeResetPassword({
         resetToken,
         newPassword: values.newPassword,
       });
       setDone(true);
-      setTimeout(() => navigate('/customer/login', { replace: true }), 1500);
+      setTimeout(() => navigate('/employee/login', { replace: true }), 1500);
     } catch (err) {
       setServerError(extractError(err, 'Could not reset password'));
     }
@@ -48,13 +53,13 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthLayout
-      variant="customer"
-      eyebrow="Customer Portal"
+      variant="employee"
+      eyebrow="Employee Portal"
       title="Reset your password"
       subtitle={
         resetToken
           ? 'Identity verified. Choose a new password.'
-          : 'Enter the username and mobile number you registered with.'
+          : 'Enter the username and mobile number on file. A reset token will be emailed to you.'
       }
     >
       {serverError && (
@@ -93,6 +98,7 @@ export default function ForgotPasswordPage() {
             <Button
               type="submit"
               variant="contained"
+              color="secondary"
               size="large"
               disabled={verifyForm.formState.isSubmitting}
             >
@@ -117,6 +123,7 @@ export default function ForgotPasswordPage() {
             <Button
               type="submit"
               variant="contained"
+              color="secondary"
               size="large"
               disabled={resetForm.formState.isSubmitting}
             >
@@ -129,8 +136,8 @@ export default function ForgotPasswordPage() {
       <Box sx={{ mt: 3, textAlign: 'center' }}>
         <Typography variant="caption" color="text.secondary">
           Remembered it?{' '}
-          <Link component={RouterLink} to="/customer/login" underline="hover">
-            Back to sign in
+          <Link component={RouterLink} to="/employee/login" underline="hover">
+            Back to staff sign-in
           </Link>
         </Typography>
       </Box>

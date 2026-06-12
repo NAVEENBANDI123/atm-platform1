@@ -29,18 +29,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Outbox-pattern email service.
+ * Outbox-pattern email service with self-healing visibility.
  *
- * <p>{@link #send} renders the template and persists a row in
- * {@code email_outbox} with status {@code QUEUED}; an asynchronous worker
- * (kicked off both on-write and via {@link Scheduled}) drains the outbox
- * via SMTP. This pattern means the calling business transaction never
- * blocks on SMTP and emails survive a transient mail-server outage.</p>
+ * <p>Every call to {@link #send} (a) renders the template, (b) writes the
+ * message to {@code email_outbox} with status {@code QUEUED}, and (c) when
+ * {@code app.mail.log-to-console=true} (default) also dumps the rendered
+ * subject + body to the application log so the user can verify mails work
+ * even without a real SMTP server.</p>
+ *
+ * <p>An asynchronous worker (kicked off both on-write and via a fixed-delay
+ * {@link Scheduled} flush) attempts to deliver via SMTP. If SMTP isn't
+ * reachable the row stays {@code QUEUED} and is retried up to 5 times before
+ * being marked {@code FAILED}; the log already contains the body so the
+ * developer never loses visibility.</p>
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
+
+    private static final int MAX_LOG_BODY_CHARS = 4000;
+    private static final int MAX_DISPATCH_ATTEMPTS = 5;
 
     private final EmailOutboxRepository outboxRepository;
     private final TemplateEngine templateEngine;
@@ -57,6 +66,7 @@ public class EmailServiceImpl implements EmailService {
     public void send(String to, List<String> cc, String subject, String template,
                      Map<String, Object> variables) {
         String body = renderTemplate(template, variables);
+
         EmailOutbox row = EmailOutbox.builder()
                 .toAddress(to)
                 .ccAddresses(cc == null || cc.isEmpty() ? null : String.join(",", cc))
@@ -66,7 +76,25 @@ public class EmailServiceImpl implements EmailService {
                 .status(EmailStatus.QUEUED)
                 .attempts(0)
                 .build();
-        outboxRepository.save(row);
+        row = outboxRepository.save(row);
+
+        // Always make the email visible in the app log so developers / QA can
+        // verify the flow end-to-end without needing MailHog/Mailtrap. The log
+        // line is multi-line and clearly bracketed so it shows up in a tail.
+        if (appProperties.getMail().isLogToConsole()) {
+            log.info("\n========== EMAIL #{} (queued) ==========\n"
+                            + "To:       {}\n"
+                            + "Cc:       {}\n"
+                            + "Subject:  {}\n"
+                            + "Template: {}\n"
+                            + "----- body -----\n{}\n"
+                            + "===========================================",
+                    row.getId(), row.getToAddress(),
+                    row.getCcAddresses() == null ? "(none)" : row.getCcAddresses(),
+                    row.getSubject(), row.getTemplate(),
+                    truncate(body, MAX_LOG_BODY_CHARS));
+        }
+
         // Best-effort immediate dispatch in the background; the @Scheduled
         // flushOutbox() acts as a retry safety net.
         triggerAsyncFlush();
@@ -116,13 +144,19 @@ public class EmailServiceImpl implements EmailService {
                 row.setSentAt(LocalDateTime.now());
                 row.setLastError(null);
                 outboxRepository.save(row);
+                log.info("Email #{} delivered via SMTP to {}", row.getId(), row.getToAddress());
             } catch (MailException | MessagingException | UnsupportedEncodingException ex) {
                 row.setAttempts(row.getAttempts() + 1);
                 row.setLastError(truncate(ex.getMessage(), 1000));
-                if (row.getAttempts() >= 5) {
+                if (row.getAttempts() >= MAX_DISPATCH_ATTEMPTS) {
                     row.setStatus(EmailStatus.FAILED);
-                    log.error("Email permanently failed after {} attempts: id={}, to={}",
-                            row.getAttempts(), row.getId(), row.getToAddress());
+                    log.error("Email #{} permanently failed after {} attempts (to={}): {}",
+                            row.getId(), row.getAttempts(), row.getToAddress(),
+                            row.getLastError());
+                } else {
+                    log.warn("Email #{} dispatch attempt {} failed (to={}): {} - will retry",
+                            row.getId(), row.getAttempts(), row.getToAddress(),
+                            row.getLastError());
                 }
                 outboxRepository.save(row);
             }
@@ -150,6 +184,6 @@ public class EmailServiceImpl implements EmailService {
 
     private static String truncate(String s, int max) {
         if (s == null) return null;
-        return s.length() > max ? s.substring(0, max) : s;
+        return s.length() > max ? s.substring(0, max) + "...[truncated]" : s;
     }
 }

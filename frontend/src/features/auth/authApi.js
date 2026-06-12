@@ -4,6 +4,7 @@ const CUSTOMER = '/api/v1/auth/customer';
 const EMPLOYEE = '/api/v1/auth/employee';
 
 export const authApi = {
+  // ---- Customer ----
   customerLogin: (payload) => axiosClient.post(`${CUSTOMER}/login`, payload),
   customerRegister: (payload) =>
     axiosClient.post(`${CUSTOMER}/register`, payload),
@@ -16,7 +17,12 @@ export const authApi = {
   customerLogout: (refreshToken) =>
     axiosClient.post(`${CUSTOMER}/logout`, { refreshToken }),
 
+  // ---- Employee ----
   employeeLogin: (payload) => axiosClient.post(`${EMPLOYEE}/login`, payload),
+  employeeForgotPassword: (payload) =>
+    axiosClient.post(`${EMPLOYEE}/forgot-password`, payload),
+  employeeResetPassword: (payload) =>
+    axiosClient.post(`${EMPLOYEE}/reset-password`, payload),
   employeeRefresh: (refreshToken) =>
     axiosClient.post(`${EMPLOYEE}/refresh`, { refreshToken }),
   employeeLogout: (refreshToken) =>

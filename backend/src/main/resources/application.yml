@@ -65,6 +65,7 @@ app:
     from: ${MAIL_FROM:no-reply@atm.local}
     from-name: ${MAIL_FROM_NAME:ATM Platform}
     enabled: ${MAIL_ENABLED:true}
+    log-to-console: ${MAIL_LOG_TO_CONSOLE:true}   # ALWAYS log every email body to the app log so you can verify mails work without needing a real SMTP server
     admin-recipients: ${MAIL_ADMIN_RECIPIENTS:admin@atm.local,accountant@atm.local}
     card-officer-recipients: ${MAIL_CARD_OFFICER_RECIPIENTS:card.officer@atm.local}
     loan-officer-recipients: ${MAIL_LOAN_OFFICER_RECIPIENTS:loan.officer@atm.local}
@@ -77,6 +78,14 @@ app:
       education: 9.50
       vehicle: 10.50
       home: 8.50
+  demo:
+    # When true, every startup ensures the seeded demo users (admin, superadmin,
+    # accountant, cashier, cardofficer, loanofficer, jdoe) have their password
+    # reset to the value of demo.default-password. This guarantees you can always
+    # log in with the documented credentials in development. Turn this OFF in any
+    # real deployment (DEMO_RESET_PASSWORDS=false).
+    reset-passwords: ${DEMO_RESET_PASSWORDS:true}
+    default-password: ${DEMO_DEFAULT_PASSWORD:password}
 
 springdoc:
   swagger-ui:
@@ -94,6 +103,9 @@ management:
       probes:
         enabled: true
       show-details: when-authorized
+  health:
+    mail:
+      enabled: false   # don't fail /actuator/health when SMTP is unavailable
 
 logging:
   level:

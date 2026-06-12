@@ -23,7 +23,12 @@ public interface AuthService {
 
     void logout(RefreshTokenRequest request);
 
-    String forgotPassword(ForgotPasswordRequest request);
+    /** Customer forgot-password: verifies username + mobile, returns a reset token, emails it. */
+    String customerForgotPassword(ForgotPasswordRequest request);
 
+    /** Employee forgot-password: verifies username + mobile, returns a reset token, emails it. */
+    String employeeForgotPassword(ForgotPasswordRequest request);
+
+    /** Reset password using a reset token issued by either of the forgot-password flows. */
     void resetPassword(ResetPasswordRequest request);
 }

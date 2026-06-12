@@ -235,20 +235,31 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional(readOnly = true)
-    public String forgotPassword(ForgotPasswordRequest request) {
+    public String customerForgotPassword(ForgotPasswordRequest request) {
+        return issueResetToken(request, UserType.CUSTOMER, "Customer password reset request");
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String employeeForgotPassword(ForgotPasswordRequest request) {
+        return issueResetToken(request, UserType.EMPLOYEE, "Employee password reset request");
+    }
+
+    private String issueResetToken(ForgotPasswordRequest request, UserType expectedType,
+                                   String emailSubject) {
         User user = userRepository.findByUsernameAndMobile(request.username(), request.mobile())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "No account matches the provided username and mobile"));
-        if (user.getUserType() != UserType.CUSTOMER) {
-            throw new BadRequestException("Password reset is for customers only. "
-                    + "Employees must contact their administrator.");
+        if (user.getUserType() != expectedType) {
+            throw new BadRequestException(expectedType == UserType.CUSTOMER
+                    ? "This username is not a customer account. Use the employee portal instead."
+                    : "This username is not an employee account. Use the customer portal instead.");
         }
         String resetToken = tokenProvider.generateAccessToken(user.getUsername(), List.of("PWD_RESET"));
-        auditService.record("FORGOT_PASSWORD", "USER", String.valueOf(user.getId()), null);
+        auditService.record("FORGOT_PASSWORD", "USER", String.valueOf(user.getId()),
+                expectedType.name() + " requested password reset");
 
-        emailService.send(user.getEmail(),
-                "Password reset request",
-                "customer-password-reset",
+        emailService.send(user.getEmail(), emailSubject, "customer-password-reset",
                 Map.of("name", user.getFullName(), "resetToken", resetToken));
         return resetToken;
     }

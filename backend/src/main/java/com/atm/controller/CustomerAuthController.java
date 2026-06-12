@@ -53,7 +53,7 @@ public class CustomerAuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Map<String, String>>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request) {
-        String token = authService.forgotPassword(request);
+        String token = authService.customerForgotPassword(request);
         return ResponseEntity.ok(ApiResponse.success(
                 Map.of("resetToken", token),
                 "Identity verified. A reset token has been emailed to you."));

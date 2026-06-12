@@ -9,6 +9,7 @@ import CustomerLoginPage from './pages/customer/CustomerLoginPage.jsx';
 import CustomerRegisterPage from './pages/customer/CustomerRegisterPage.jsx';
 import ForgotPasswordPage from './pages/customer/ForgotPasswordPage.jsx';
 import EmployeeLoginPage from './pages/employee/EmployeeLoginPage.jsx';
+import EmployeeForgotPasswordPage from './pages/employee/EmployeeForgotPasswordPage.jsx';
 
 import CustomerDashboardPage from './pages/customer/CustomerDashboardPage.jsx';
 import ServicesPage from './pages/customer/ServicesPage.jsx';
@@ -61,6 +62,10 @@ export default function App() {
       <Route path="/customer/register" element={<CustomerRegisterPage />} />
       <Route path="/customer/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/employee/login" element={<EmployeeLoginPage />} />
+      <Route
+        path="/employee/forgot-password"
+        element={<EmployeeForgotPasswordPage />}
+      />
 
       {/* Customer area */}
       <Route element={<ProtectedRoute customerOnly />}>
